@@ -1,0 +1,60 @@
+.coolcalc {
+  font-family: "Playwrite ES Deco";
+  margin: 16px;
+  padding: 16px;
+  border: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  align-items: center;
+  background: linear-gradient(30deg, #cd9bf6, #fdecd6);
+  width: 200px;
+}
+
+.coolcalc h1 {
+  margin: 0;
+}
+
+.coolcalc .display {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.coolcalc input {
+  width: 30px;
+  height: 30px;
+  font-family: inherit;
+  text-align: center;
+}
+
+.coolcalc input:focus {
+  outline-color: #8832ce;
+}
+
+.coolcalc .buttons {
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+}
+
+.coolcalc .buttons div {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  column-gap: 4px;
+}
+
+.coolcalc button {
+  display: block;
+  font-family: inherit;
+  width: 40px;
+  height: 40px;
+  background-color: #fdecd6;
+  border: 2px solid #e99629;
+}
+
+.coolcalc button {
+  cursor: pointer;
+}
+
