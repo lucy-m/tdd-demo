@@ -1,4 +1,4 @@
-import { CoolCalc } from "./03-CoolCalc";
+import { CoolCalc } from "./05-CoolCalc";
 
 describe("<CoolCalc />", () => {
   it("renders", () => {
