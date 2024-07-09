@@ -7,6 +7,15 @@ describe("<CypressPrimer />", () => {
       cy.mount(<CypressPrimer step={1} />);
     });
 
+    it("has increment and decrement buttons", () => {
+      // cy.get can select any value via its css selector
+      // For this session we will use IDs only
+      // All get commands contain an implicit assumption
+      //   that the element exists
+      cy.get("#increment");
+      cy.get("#decrement");
+    });
+
     it("displays value 1", () => {
       // cy.get can select any value via its css selector
       // For this session we will use IDs only
@@ -29,6 +38,7 @@ describe("<CypressPrimer />", () => {
           // Chaining '.click()' will click the element
           .click();
       });
+
       it("displays value 2", () => {
         // TODO: Assert the value and display are correct
       });
