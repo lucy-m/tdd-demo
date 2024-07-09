@@ -23,5 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 
-src/demo/99-CoolCalcSolution.tsx
+src/demo/99-CoolCalc.tsx
 src/demo/99-CoolCalc.css
