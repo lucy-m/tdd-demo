@@ -30,8 +30,8 @@ describe("<CypressPrimer />", () => {
     });
 
     // For any interactions that change state, I recommend wrapping them in
-    //   their own describe block. This allows you to separate the setup
-    //   from the assertions.
+    //   their own describe block. This allows you to separate the user actions
+    //   from any assertions required at that step.
     describe("clicking increment button", () => {
       beforeEach(() => {
         cy.get("#increment")

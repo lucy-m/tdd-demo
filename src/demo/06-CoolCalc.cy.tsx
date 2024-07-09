@@ -68,6 +68,11 @@ describe("<CoolCalc />", () => {
 
       it("does not set value in inputs", () => {
         // TODO
+        // Note: This behaviour is non-trivial to implement along with the other tests above.
+        // This is intentional from me as I want to highlight how following test-driven
+        // development practices can highlight edge cases that are not immediately obvious.
+        // Without the tests you may have implemented this without realising it breaks
+        // the existing behaviour ;)
       });
     });
   });
@@ -77,7 +82,7 @@ describe("<CoolCalc />", () => {
   // specification and implement via TDD.
 
   // What happens when:
-  // - the user enters input 2 before input 1?
+  // - the user enters a value into the second output before the first?
   // - the keyboard is used as input?
   //     Consider the case of valid (e.g. single number) and invalid input (e.g. multiple numbers, letters)
   // - both inputs are entered and the user clicks a number?
