@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 
 src/demo/99-CoolCalcSolution.tsx
+src/demo/99-CoolCalc.css
