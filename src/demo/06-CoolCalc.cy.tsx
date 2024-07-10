@@ -1,4 +1,4 @@
-import { CoolCalc } from "./99-CoolCalc";
+import { CoolCalc } from "./05-CoolCalc";
 
 describe("<CoolCalc />", () => {
   beforeEach(() => {

@@ -25,3 +25,4 @@ dist-ssr
 
 src/demo/99-CoolCalc.tsx
 src/demo/99-CoolCalc.css
+src/demo/99-CoolCalcDemo.cy.tsx
