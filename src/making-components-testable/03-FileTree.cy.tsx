@@ -4,6 +4,7 @@ const fileTreePageObjectModel = {
   getEntry: (name: string) => cy.get(`[data-name='${name}']`),
   getRenameInput: () => cy.get("input"),
   getRenameButton: () => cy.get("[aria-label='Rename']"),
+  getDeleteButton: () => cy.get("[aria-label='Delete']"),
   getAcceptButton: () => cy.get("[aria-label='Accept']"),
   getCancelButton: () => cy.get("[aria-label='Cancel']"),
 
@@ -22,6 +23,8 @@ const fileTreePageObjectModel = {
         fileTreePageObjectModel.getAcceptButton().click();
       });
   },
+
+  // TODO: Implement POM methods for deleting
 };
 
 describe("FileTree", () => {
@@ -33,10 +36,14 @@ describe("FileTree", () => {
         nodes={[
           {
             name: "foo",
-            children: [{ name: "bar.h" }, { name: "bar.c" }],
+            children: [
+              { name: "bar.h", children: [] },
+              { name: "bar.c", children: [] },
+            ],
           },
           {
             name: "myfile.txt",
+            children: [],
           },
         ]}
         onChange={cy.spy().as("onChangeSpy")}
@@ -91,10 +98,14 @@ describe("FileTree", () => {
           getOnChangeSpy().should("have.been.calledWith", [
             {
               name: "foo",
-              children: [{ name: "new name" }, { name: "bar.c" }],
+              children: [
+                { name: "new name", children: [] },
+                { name: "bar.c", children: [] },
+              ],
             },
             {
               name: "myfile.txt",
+              children: [],
             },
           ]);
         });
@@ -107,20 +118,45 @@ describe("FileTree", () => {
       });
     });
 
-    describe("fileTreePageObjectModel methods", () => {
-      it("rename", () => {
-        fileTreePageObjectModel.rename("myfile.txt", "newname.txt");
+    describe("clicking delete", () => {
+      beforeEach(() => {
+        entryElement().within(() => {
+          fileTreePageObjectModel.getDeleteButton().click();
+        });
+      });
 
+      it("emits new file tree", () => {
         getOnChangeSpy().should("have.been.calledWith", [
           {
             name: "foo",
-            children: [{ name: "bar.h" }, { name: "bar.c" }],
+            children: [{ name: "bar.c", children: [] }],
           },
           {
-            name: "newname.txt",
+            name: "myfile.txt",
+            children: [],
           },
         ]);
       });
+    });
+  });
+
+  describe("fileTreePageObjectModel methods", () => {
+    it("rename", () => {
+      fileTreePageObjectModel.rename("myfile.txt", "newname.txt");
+
+      getOnChangeSpy().should("have.been.calledWith", [
+        {
+          name: "foo",
+          children: [
+            { name: "bar.h", children: [] },
+            { name: "bar.c", children: [] },
+          ],
+        },
+        {
+          name: "newname.txt",
+          children: [],
+        },
+      ]);
     });
   });
 });
