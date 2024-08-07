@@ -1,31 +1,9 @@
-import { FileTree } from "./02-FileTree";
+import { FileTree } from "./FileTree";
+import { fileTreePageObjectModel } from "./FileTree.pom";
 
-const fileTreePageObjectModel = {
-  getEntry: (name: string) => cy.get(`[data-name='${name}']`),
-  getRenameInput: () => cy.get("input"),
-  getRenameButton: () => cy.get("[aria-label='Rename']"),
-  getDeleteButton: () => cy.get("[aria-label='Delete']"),
-  getAcceptButton: () => cy.get("[aria-label='Accept']"),
-  getCancelButton: () => cy.get("[aria-label='Cancel']"),
-
-  hasEntry: (type: "folder" | "file", name: string) =>
-    fileTreePageObjectModel.getEntry(name).within(() => {
-      cy.contains(type === "folder" ? "📁" : "📝");
-    }),
-
-  rename: (fromName: string, toName: string) => {
-    fileTreePageObjectModel
-      .getEntry(fromName)
-      .realHover()
-      .within(() => {
-        fileTreePageObjectModel.getRenameButton().click();
-        fileTreePageObjectModel.getRenameInput().clear().type(toName);
-        fileTreePageObjectModel.getAcceptButton().click();
-      });
-  },
-
-  // TODO: Implement POM methods for deleting
-};
+// Warning that these tests are using .realHover to ensure buttons
+//   are visible before clicking. Moving your mouse while the test
+//   is running can cause the test to fail.
 
 describe("FileTree", () => {
   const getOnChangeSpy = () => cy.get("@onChangeSpy");

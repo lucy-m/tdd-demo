@@ -1,7 +1,9 @@
-import { Button } from "./00-Button";
+import { Button } from "./Button";
 
 // There's nothing in these tests, mainly here so you can preview what the
 //   buttons look like for this app.
+// Tests in this file would assert things like e.g. for the correct type,
+//   the correct background color and border is displayed
 
 describe("Button", () => {
   beforeEach(() => {

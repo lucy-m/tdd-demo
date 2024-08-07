@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Button } from "./00-Button";
-import "./02-FileTree.css";
+import { Button } from "../01-Button/Button";
+import "./FileTree.css";
 
 export type TreeNode = {
   name: string;

@@ -1,8 +1,5 @@
-import { IdeWithTabs } from "./04-IdeWithTabs";
-
-const ideWithTabsPageObjectModel = {
-  getTab: (name: string) => cy.get(`[data-tab='${name}']`),
-};
+import { IdeWithTabs } from "./IdeWithTabs";
+import { ideWithTabsPageObjectModel } from "./IdeWithTabs.pom";
 
 describe("IdeWithTabs", () => {
   beforeEach(() => {
@@ -28,5 +25,14 @@ describe("IdeWithTabs", () => {
       .should("not.have.class", "active");
 
     ideWithTabsPageObjectModel.getTab("xyz.txt").should("have.class", "active");
+  });
+
+  it("has correct content", () => {
+    ideWithTabsPageObjectModel.hasContent("hello!");
+  });
+
+  it("clicking a tab", () => {
+    ideWithTabsPageObjectModel.selectTab("foo.ts");
+    cy.get("@onTabClick").should("have.been.calledWith", "foo.ts");
   });
 });

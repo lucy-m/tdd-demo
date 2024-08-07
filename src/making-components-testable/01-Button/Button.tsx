@@ -1,4 +1,4 @@
-import "./00-Button.css";
+import "./Button.css";
 
 export type ButtonProps = {
   label: string;

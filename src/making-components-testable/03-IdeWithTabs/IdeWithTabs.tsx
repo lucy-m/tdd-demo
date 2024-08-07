@@ -1,5 +1,5 @@
 import React from "react";
-import "./04-IdeWithTabs.css";
+import "./IdeWithTabs.css";
 
 export type IdeWithTabsProps = {
   tabs: string[];
@@ -12,6 +12,7 @@ export const IdeWithTabs: React.FC<IdeWithTabsProps> = ({
   tabs,
   activeTab,
   tabContent,
+  onTabClick,
 }) => {
   return (
     <div>
@@ -22,12 +23,15 @@ export const IdeWithTabs: React.FC<IdeWithTabsProps> = ({
             className={
               "ide-with-tabs-tab " + (t === activeTab ? "active" : "inactive")
             }
+            onClick={() => onTabClick(t)}
           >
             {t}
           </div>
         ))}
       </div>
-      <div className="ide-content">{tabContent}</div>
+      <div data-testid="ide-content" className="ide-content">
+        {tabContent}
+      </div>
     </div>
   );
 };
