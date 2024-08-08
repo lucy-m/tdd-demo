@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { FileTree, FileTreeChangeEvent, TreeNode } from "../02-FileTree";
 import { IdeWithTabs } from "../03-IdeWithTabs/IdeWithTabs";
 
+// Uses a promise to simulate async behaviour
 const getCachedFileTree = (): Promise<TreeNode[]> => {
   return new Promise((resolve, reject) => {
     const storageValue = window.localStorage.getItem("fileTree");
