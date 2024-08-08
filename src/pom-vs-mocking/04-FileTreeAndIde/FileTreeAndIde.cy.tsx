@@ -74,7 +74,7 @@ describe("FileTreeAndIde", () => {
   });
 
   // TODO: Mock1 - Focus this test suite
-  describe.only("with file tree mock", () => {
+  describe("with file tree mock", () => {
     beforeEach(() => {
       const mockFileTree = (props: FileTreeProps) => {
         return (
