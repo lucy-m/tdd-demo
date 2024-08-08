@@ -13,7 +13,10 @@ export const Button: React.FC<ButtonProps> = (props) => {
       <button
         className={props.type}
         aria-label={props.label}
-        onClick={props.onClick}
+        onClick={(e) => {
+          props.onClick();
+          e.stopPropagation();
+        }}
       >
         {props.icon === "tick" ? "✔️" : props.icon === "cross" ? "❌" : "✏️"}
       </button>

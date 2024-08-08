@@ -7,23 +7,42 @@ export type TreeNode = {
   children: TreeNode[];
 };
 
+export type FileTreeChangeEvent =
+  | {
+      kind: "delete";
+      node: TreeNode;
+    }
+  | {
+      kind: "rename";
+      oldNode: TreeNode;
+      newName: string;
+    };
+
 export type FileTreeProps = {
   nodes: TreeNode[];
-  onChange: (newNodes: TreeNode[]) => void;
+  onNodeClick: (node: TreeNode) => void;
+  onChange: (newNodes: TreeNode[], changeEvent: FileTreeChangeEvent) => void;
 };
 
 const TreeNodeDisplay: React.FC<{
   node: TreeNode;
+  onClick: (node: TreeNode) => void;
   onRename: (node: TreeNode, newName: string) => void;
   onDelete: (node: TreeNode) => void;
-}> = ({ node, onRename, onDelete }) => {
+}> = ({ node, onRename, onDelete, onClick }) => {
   const [isRenaming, setIsRenaming] = useState(false);
   const [renameValue, setRenameValue] = useState(node.name);
 
   const hasChildren = node.children.length > 0;
 
   return (
-    <div className="tree-node-display">
+    <div
+      className="tree-node-display"
+      onClick={(e) => {
+        onClick(node);
+        e.stopPropagation();
+      }}
+    >
       <div className="tree-node-name-wrapper" data-name={node.name}>
         <div className="tree-node-icon">{hasChildren ? "📁" : "📝"}</div>
         {isRenaming ? (
@@ -31,6 +50,7 @@ const TreeNodeDisplay: React.FC<{
             <input
               value={renameValue}
               onChange={(e) => setRenameValue(e.target.value)}
+              onClick={(e) => e.stopPropagation()}
             ></input>
             <div className="tree-node-interactions">
               <Button
@@ -78,6 +98,7 @@ const TreeNodeDisplay: React.FC<{
               <TreeNodeDisplay
                 key={c.name}
                 node={c}
+                onClick={onClick}
                 onRename={onRename}
                 onDelete={onDelete}
               />
@@ -89,7 +110,11 @@ const TreeNodeDisplay: React.FC<{
   );
 };
 
-export const FileTree: React.FC<FileTreeProps> = ({ nodes, onChange }) => {
+export const FileTree: React.FC<FileTreeProps> = ({
+  nodes,
+  onNodeClick,
+  onChange,
+}) => {
   const onRename = (node: TreeNode, newName: string) => {
     const renameNodes = (nodes: TreeNode[]): TreeNode[] => {
       return nodes.map((n) => {
@@ -102,7 +127,7 @@ export const FileTree: React.FC<FileTreeProps> = ({ nodes, onChange }) => {
 
     const renamed = renameNodes(nodes);
 
-    onChange(renamed);
+    onChange(renamed, { kind: "rename", newName, oldNode: node });
   };
 
   const onDelete = (node: TreeNode) => {
@@ -118,7 +143,7 @@ export const FileTree: React.FC<FileTreeProps> = ({ nodes, onChange }) => {
 
     const deleted = deleteNode(nodes);
 
-    onChange(deleted);
+    onChange(deleted, { kind: "delete", node });
   };
 
   return (
@@ -127,6 +152,7 @@ export const FileTree: React.FC<FileTreeProps> = ({ nodes, onChange }) => {
         <TreeNodeDisplay
           key={n.name}
           node={n}
+          onClick={onNodeClick}
           onRename={onRename}
           onDelete={onDelete}
         />
