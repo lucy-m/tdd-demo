@@ -24,5 +24,7 @@ export const fileTreePageObjectModel = {
       });
   },
 
-  // TODO: Implement POM methods for deleting
+  delete: (nodeName: string) => {
+    // TODO: POM1 - Implement POM methods for deleting
+  },
 };

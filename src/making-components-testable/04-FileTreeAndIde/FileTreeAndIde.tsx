@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { FileTree, FileTreeChangeEvent, TreeNode } from "../02-FileTree";
-import { IdeWithTabs } from "../03-IdeWithTabs/IdeWithTabs";
+import { FileTreeChangeEvent, TreeNode } from "../02-FileTree";
+import { useComponentInjector } from "./ComponentInjector";
 
 export const FileTreeAndIde: React.FC = () => {
+  const { FileTree, IdeWithTabs } = useComponentInjector();
+
   const [fileTree, setFileTree] = useState<TreeNode[] | undefined>();
   const [activeTab, setActiveTab] = useState<string | undefined>();
   const [tabs, setTabs] = useState<string[]>([]);
@@ -40,7 +42,8 @@ export const FileTreeAndIde: React.FC = () => {
       }
     }
 
-    // TODO: Implement correct change handling for delete
+    // TODO: POM3 - Implement correct change handling for delete
+    // TODO: Mock4
   };
 
   return (

@@ -7,6 +7,7 @@ import { fileTreePageObjectModel } from "./FileTree.pom";
 
 describe("FileTree", () => {
   const getOnChangeSpy = () => cy.get("@onChangeSpy");
+  const getOnNodeClickSpy = () => cy.get("@onNodeClick");
 
   beforeEach(() => {
     cy.mount(
@@ -25,6 +26,7 @@ describe("FileTree", () => {
           },
         ]}
         onChange={cy.spy().as("onChangeSpy")}
+        onNodeClick={cy.spy().as("onNodeClick")}
       />
     );
   });
@@ -34,6 +36,19 @@ describe("FileTree", () => {
     fileTreePageObjectModel.hasEntry("file", "bar.h");
     fileTreePageObjectModel.hasEntry("file", "bar.c");
     fileTreePageObjectModel.hasEntry("file", "myfile.txt");
+  });
+
+  describe("clicking entry", () => {
+    beforeEach(() => {
+      fileTreePageObjectModel.getEntry("myfile.txt").click();
+    });
+
+    it("calls onNodeClick", () => {
+      getOnNodeClickSpy().should("have.been.calledWith", {
+        name: "myfile.txt",
+        children: [],
+      });
+    });
   });
 
   describe("hovering entry", () => {
@@ -56,6 +71,10 @@ describe("FileTree", () => {
         });
       });
 
+      it("does not call onNodeClick", () => {
+        getOnNodeClickSpy().should("not.have.been.called");
+      });
+
       it("initiates rename", () => {
         fileTreePageObjectModel.getRenameInput().should("have.value", "bar.h");
       });
@@ -73,19 +92,27 @@ describe("FileTree", () => {
         });
 
         it("emits new file tree", () => {
-          getOnChangeSpy().should("have.been.calledWith", [
+          getOnChangeSpy().should(
+            "have.been.calledWith",
+            [
+              {
+                name: "foo",
+                children: [
+                  { name: "new name", children: [] },
+                  { name: "bar.c", children: [] },
+                ],
+              },
+              {
+                name: "myfile.txt",
+                children: [],
+              },
+            ],
             {
-              name: "foo",
-              children: [
-                { name: "new name", children: [] },
-                { name: "bar.c", children: [] },
-              ],
-            },
-            {
-              name: "myfile.txt",
-              children: [],
-            },
-          ]);
+              kind: "rename",
+              newName: "new name",
+              oldNode: { name: "bar.h", children: [] },
+            }
+          );
         });
       });
 
@@ -103,17 +130,28 @@ describe("FileTree", () => {
         });
       });
 
+      it("does not emit onNodeClick", () => {
+        getOnNodeClickSpy().should("not.have.been.called");
+      });
+
       it("emits new file tree", () => {
-        getOnChangeSpy().should("have.been.calledWith", [
+        getOnChangeSpy().should(
+          "have.been.calledWith",
+          [
+            {
+              name: "foo",
+              children: [{ name: "bar.c", children: [] }],
+            },
+            {
+              name: "myfile.txt",
+              children: [],
+            },
+          ],
           {
-            name: "foo",
-            children: [{ name: "bar.c", children: [] }],
-          },
-          {
-            name: "myfile.txt",
-            children: [],
-          },
-        ]);
+            kind: "delete",
+            node: { name: "bar.h", children: [] },
+          }
+        );
       });
     });
   });
