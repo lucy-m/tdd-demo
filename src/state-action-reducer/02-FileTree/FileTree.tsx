@@ -1,27 +1,11 @@
 import { useState } from "react";
 import { Button } from "../01-Button/Button";
 import "./FileTree.css";
-
-export type TreeNode = {
-  name: string;
-  children: TreeNode[];
-};
-
-export type FileTreeChangeEvent =
-  | {
-      kind: "delete";
-      node: TreeNode;
-    }
-  | {
-      kind: "rename";
-      oldNode: TreeNode;
-      newName: string;
-    };
+import { FileTreeAction, FileTreeState, TreeNode } from "./fileTreeState";
 
 export type FileTreeProps = {
-  nodes: TreeNode[];
-  onNodeClick: (node: TreeNode) => void;
-  onChange: (newNodes: TreeNode[], changeEvent: FileTreeChangeEvent) => void;
+  state: FileTreeState;
+  dispatch: (action: FileTreeAction) => void;
 };
 
 const TreeNodeDisplay: React.FC<{
@@ -110,41 +94,8 @@ const TreeNodeDisplay: React.FC<{
   );
 };
 
-export const FileTree: React.FC<FileTreeProps> = ({
-  nodes,
-  onNodeClick,
-  onChange,
-}) => {
-  const onRename = (node: TreeNode, newName: string) => {
-    const renameNodes = (nodes: TreeNode[]): TreeNode[] => {
-      return nodes.map((n) => {
-        const name = n === node ? newName : n.name;
-        const children = renameNodes(n.children);
-
-        return { name, children };
-      });
-    };
-
-    const renamed = renameNodes(nodes);
-
-    onChange(renamed, { kind: "rename", newName, oldNode: node });
-  };
-
-  const onDelete = (node: TreeNode) => {
-    const deleteNode = (nodes: TreeNode[]): TreeNode[] => {
-      return nodes
-        .filter((n) => n !== node)
-        .map((n) => {
-          const children = deleteNode(n.children);
-
-          return { name: n.name, children };
-        });
-    };
-
-    const deleted = deleteNode(nodes);
-
-    onChange(deleted, { kind: "delete", node });
-  };
+export const FileTree: React.FC<FileTreeProps> = ({ state, dispatch }) => {
+  const nodes = state.nodes;
 
   return (
     <div>
@@ -152,9 +103,20 @@ export const FileTree: React.FC<FileTreeProps> = ({
         <TreeNodeDisplay
           key={n.name}
           node={n}
-          onClick={onNodeClick}
-          onRename={onRename}
-          onDelete={onDelete}
+          onClick={() => dispatch({ kind: "nodeClick", node: n })}
+          onRename={(node, newName) =>
+            dispatch({
+              kind: "rename",
+              node,
+              newName,
+            })
+          }
+          onDelete={(node) =>
+            dispatch({
+              kind: "delete",
+              node,
+            })
+          }
         />
       ))}
     </div>

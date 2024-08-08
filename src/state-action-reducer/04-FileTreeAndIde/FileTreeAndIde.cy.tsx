@@ -1,44 +1,13 @@
-import { FileTreeProps } from "../02-FileTree";
 import { fileTreePageObjectModel } from "../02-FileTree/FileTree.pom";
 import { ideWithTabsPageObjectModel } from "../03-IdeWithTabs/IdeWithTabs.pom";
-import { ComponentInjectorProvider } from "./ComponentInjector";
 import { FileTreeAndIde } from "./FileTreeAndIde";
+import {
+  FileTreeAndIdeAction,
+  fileTreeAndIdeReducer,
+  FileTreeAndIdeState,
+} from "./fileTreeAndIdeState";
 
 describe("FileTreeAndIde", () => {
-  beforeEach(() => {
-    // Setting up some API intercepts to mimic API calling
-    cy.intercept(
-      {
-        url: "/fileTree",
-      },
-      {
-        body: [
-          { name: "foo", children: [] },
-          {
-            name: "mocks",
-            children: [
-              { name: "source1.txt", children: [] },
-              { name: "source2.txt", children: [] },
-            ],
-          },
-        ],
-      }
-    ).as("getFileTree");
-
-    cy.intercept(
-      {
-        url: /\/content/,
-      },
-      (request) => {
-        const filename = request.url.split("/").pop();
-
-        request.reply({
-          body: "Content for " + filename,
-        });
-      }
-    ).as("getFileContent");
-  });
-
   describe("pom tests", () => {
     beforeEach(() => {
       cy.mount(<FileTreeAndIde />);
@@ -51,9 +20,6 @@ describe("FileTreeAndIde", () => {
 
       it("opens entry in ide", () => {
         ideWithTabsPageObjectModel.getTab("foo");
-
-        // Check API was called
-        cy.wait("@getFileContent");
 
         ideWithTabsPageObjectModel.hasContent("Content for foo");
       });
@@ -68,55 +34,61 @@ describe("FileTreeAndIde", () => {
           ideWithTabsPageObjectModel.getTab("bar");
         });
       });
-
-      // TODO: POM2 - Add tests for deleting
     });
   });
+});
 
-  // TODO: Mock1 - Focus this test suite
-  describe.only("with file tree mock", () => {
-    beforeEach(() => {
-      const mockFileTree = (props: FileTreeProps) => {
-        return (
-          <div>
-            Mock file tree
-            <button
-              onClick={() => {
-                props.onNodeClick({
-                  name: "someNode",
-                  children: [],
-                });
-              }}
-            >
-              onNodeClick someNode
-            </button>
-          </div>
-        );
+describe("fileTreeAndIdeReducer", () => {
+  describe("rename", () => {
+    it("works", () => {
+      // Simple case here
+      // You would want to add more test cases to check for edge cases
+
+      const initialState: FileTreeAndIdeState = {
+        fileTree: {
+          nodes: [
+            {
+              name: "folder",
+              children: [
+                { name: "file1.txt", children: [] },
+                { name: "file2.txt", children: [] },
+              ],
+            },
+            { name: "zugzug", children: [] },
+          ],
+        },
+        ideWithTabs: {
+          activeTab: "file1.txt",
+          tabs: ["file1.txt"],
+        },
       };
 
-      cy.mount(
-        <ComponentInjectorProvider overrides={{ FileTree: mockFileTree }}>
-          <FileTreeAndIde />
-        </ComponentInjectorProvider>
-      );
-    });
+      const action: FileTreeAndIdeAction = {
+        kind: "rename",
+        node: { name: "file1.txt", children: [] },
+        newName: "new name.txt",
+      };
 
-    describe("clicking a node in the file tree", () => {
-      beforeEach(() => {
-        cy.contains("button", "onNodeClick someNode").click();
-      });
+      const expected: FileTreeAndIdeState = {
+        fileTree: {
+          nodes: [
+            {
+              name: "folder",
+              children: [
+                { name: "file1.txt", children: [] },
+                { name: "file2.txt", children: [] },
+              ],
+            },
+            { name: "zugzug", children: [] },
+          ],
+        },
+        ideWithTabs: {
+          activeTab: "new name.txt",
+          tabs: ["new name.txt"],
+        },
+      };
 
-      it("opens file in IDE", () => {
-        ideWithTabsPageObjectModel.getTab("someNode");
-      });
-
-      // TODO: Mock2 - Add a test for node renaming behaviour
-      // Renaming the open node "someNode" should also rename the IDE tab
-      // This behaviour is already implemented
-
-      // TODO: Mock3 - Add a test for delete behaviour
-      // Deleting the open node "someNode" should also delete the IDE tab
-      // This behaviour is not yet implemented
+      expect(fileTreeAndIdeReducer(initialState, action)).to.eq(expected);
     });
   });
 });

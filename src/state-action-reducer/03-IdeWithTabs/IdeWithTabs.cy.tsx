@@ -5,10 +5,11 @@ describe("IdeWithTabs", () => {
   beforeEach(() => {
     cy.mount(
       <IdeWithTabs
-        tabs={["foo.ts", "bar.h", "xyz.txt"]}
-        activeTab="xyz.txt"
-        tabContent="hello!"
-        onTabClick={cy.spy().as("onTabClick")}
+        state={{
+          tabs: ["foo.ts", "bar.h", "xyz.txt"],
+          activeTab: "xyz.txt",
+        }}
+        dispatch={cy.spy().as("dispatch")}
       />
     );
   });
@@ -19,20 +20,16 @@ describe("IdeWithTabs", () => {
     ideWithTabsPageObjectModel.getTab("xyz.txt");
   });
 
-  it("shows selected tab", () => {
-    ideWithTabsPageObjectModel
-      .getTab("foo.ts")
-      .should("not.have.class", "active");
+  describe("selecting a tab", () => {
+    beforeEach(() => {
+      ideWithTabsPageObjectModel.selectTab("foo.ts");
+    });
 
-    ideWithTabsPageObjectModel.getTab("xyz.txt").should("have.class", "active");
-  });
-
-  it("has correct content", () => {
-    ideWithTabsPageObjectModel.hasContent("hello!");
-  });
-
-  it("clicking a tab", () => {
-    ideWithTabsPageObjectModel.selectTab("foo.ts");
-    cy.get("@onTabClick").should("have.been.calledWith", "foo.ts");
+    it("dispatches action", () => {
+      cy.get("@dispatch").should("have.been.calledWith", {
+        kind: "tabClick",
+        tab: "foo.ts",
+      });
+    });
   });
 });
