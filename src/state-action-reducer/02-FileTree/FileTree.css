@@ -1,0 +1,31 @@
+.tree-node-display {
+  font-family: "Aleo";
+}
+
+.tree-node-display > div {
+  display: flex;
+  column-gap: 16px;
+  align-items: center;
+}
+
+.tree-node-interactions {
+  visibility: hidden;
+  margin-left: auto;
+}
+
+.tree-node-name-wrapper:hover {
+  outline: 2px solid hsl(88deg, 34%, 20%);
+}
+
+.tree-node-name-wrapper:hover .tree-node-interactions {
+  visibility: initial;
+}
+
+.tree-node-children-wrapper {
+  width: 100%;
+}
+
+.tree-node-icon, .tree-node-spacer {
+  width: 16px;
+  font-size: 1.4rem;
+}

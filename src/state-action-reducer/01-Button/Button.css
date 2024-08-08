@@ -1,0 +1,18 @@
+button {
+  padding: 16px;
+  font-family: "Aleo";
+  background-color: color-mix(in srgb, var(--color), white 70%);
+  border: 2px solid color-mix(in srgb, var(--color), black 20%);
+}
+
+button.success {
+  --color: hsl(140, 65%, 52%);
+}
+
+button.warning {
+  --color: hsl(37, 89%, 58%);
+}
+
+button.neutral {
+  --color: hsl(213, 56%, 75%);
+}
