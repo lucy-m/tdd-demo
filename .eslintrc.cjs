@@ -17,5 +17,6 @@ module.exports = {
     "@typescript-eslint/no-unused-vars": "off",
     "jest/no-disabled-tests": "warn",
     "jest/no-focused-tests": "warn",
+    "@typescript-eslint/no-explicit-any": "off",
   },
 };
