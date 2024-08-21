@@ -28,7 +28,15 @@ export const usePromiseFetcher = (id: string): ProfileLoadState => {
   useEffect(() => {
     if (userProfile !== "loading" && userTabs !== "loading") {
       if (userTabs.includes("account")) {
+        // TODO: Hook1 - Simulate debouncing on the user account
+        // Comment out line immediately below
+        // Uncomment lines below
         service.getUserAccount(id).then(setUserAccount);
+        // service.getUserAccount(id).then((account) => {
+        //   setTimeout(() => {
+        //     setUserAccount(account)
+        //   }, 1000);
+        // });
       } else {
         setUserAccount("n/a");
       }

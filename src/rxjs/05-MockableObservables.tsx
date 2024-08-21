@@ -9,7 +9,7 @@ import { ProfileLoadState } from "./00-model";
 // Here, this service is used to abstract the async profile loading state
 //   from the component. No implementation of getProfileState is provided here
 //   but you can use your imagination as to how complex it could be, such as:
-//     - having multiple dependent API calls with error/refectch logic
+//     - having multiple dependent API calls with error/refetch logic
 //     - debouncing the value so that it only emits when stable for 1s
 //     - receiving push data from the server to show live updates
 //     - polling for a value using an exponential backoff
