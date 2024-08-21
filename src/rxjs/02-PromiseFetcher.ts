@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import { ProfileLoadState } from "./00-model";
 import { useProfileService } from "./01-ProfileService";
 
-export const useProfileFetcher = (id: string): ProfileLoadState => {
+// Hook that fetches profile data using promises
+// Note that since this is a hook it must follow the rules of hooks.
+// This means it cannot be used outside of a component, is not easy
+//   to mock, and is not an effective way to move complexity out of
+//   components.
+export const usePromiseFetcher = (id: string): ProfileLoadState => {
   const service = useProfileService();
 
   const [userTabs, setUserTabs] =

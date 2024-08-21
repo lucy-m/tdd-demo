@@ -9,7 +9,7 @@ import {
   TriggerablePromise,
 } from "./00-triggerable-promise";
 import { ProfileServiceContext } from "./01-ProfileService";
-import { useProfileFetcher } from "./ProfileFetcher";
+import { usePromiseFetcher } from "./02-PromiseFetcher";
 
 // There's no way to test hooks by themselves in Cypress so
 //   we are mounting it into a test helper component
@@ -18,7 +18,11 @@ import { useProfileFetcher } from "./ProfileFetcher";
 const TestHelper: React.FC<{
   id: string;
 }> = ({ id }) => {
-  const { userTabs, userProfile, userAccount } = useProfileFetcher(id);
+  const { userTabs, userProfile, userAccount } = usePromiseFetcher(id);
+
+  // Note that useObservableFetcher has the same behaviour as usePromiseFetcher
+  // You can uncomment this line and comment above and tests will pass
+  // const { userTabs, userProfile, userAccount } = useObservableFetcher(id);
 
   return (
     <dl>
