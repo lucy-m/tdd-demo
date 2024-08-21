@@ -112,7 +112,16 @@ describe("FileTreeAndIde", () => {
 
       // TODO: Mock2 - Add a test for node renaming behaviour
       // Renaming the open node "someNode" should also rename the IDE tab
-      // This behaviour is already implemented
+      describe("renaming someNode", () => {
+        beforeEach(() => {
+          // TODO: Write a command to click on the "rename" button in the mock
+        });
+
+        it("IDE tab is renamed", () => {
+          // TODO: Use the page object model to check that the old name tab
+          //   does not exist and the new name tab does exist
+        });
+      });
 
       // TODO: Mock3 - Add a test for delete behaviour
       // Deleting the open node "someNode" should also delete the IDE tab
